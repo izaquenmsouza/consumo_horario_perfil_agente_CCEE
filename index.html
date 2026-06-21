@@ -251,7 +251,11 @@ FROM 'data/processed/base_final.parquet';</code></pre>
               <h4>Consumo médio diário por mês de referência</h4>
               <p>Valores médios diários calculados após agregação por data.</p>
             </div>
-            <canvas id="dailyMonthChart" height="280" aria-label="Gráfico de linhas do consumo médio diário por mês"></canvas>
+            <div class="chart-scroll" aria-label="Área rolável do gráfico de consumo médio diário">
+              <div class="chart-inner chart-inner-line">
+                <canvas id="dailyMonthChart" height="280" aria-label="Gráfico de linhas do consumo médio diário por mês"></canvas>
+              </div>
+            </div>
           </div>
           <div class="table-wrap compact">
             <table>
@@ -291,7 +295,11 @@ FROM 'data/processed/base_final.parquet';</code></pre>
                 <h4>Participação percentual por submercado</h4>
                 <p>Distribuição do consumo ACL agregado.</p>
               </div>
-              <canvas id="submarketChart" height="260" aria-label="Gráfico de barras por submercado"></canvas>
+              <div class="chart-scroll" aria-label="Área rolável do gráfico de submercado">
+                <div class="chart-inner chart-inner-bar">
+                  <canvas id="submarketChart" height="260" aria-label="Gráfico de barras por submercado"></canvas>
+                </div>
+              </div>
             </div>
             <div class="rank-list">
               <div><span>SUDESTE</span><strong>55,92%</strong><small>25.785 cargas</small></div>
@@ -316,7 +324,11 @@ FROM 'data/processed/base_final.parquet';</code></pre>
               <h4>Top 15 estados por consumo ACL agregado</h4>
               <p>Participação percentual calculada sobre o consumo ACL total.</p>
             </div>
-            <canvas id="stateChart" height="340" aria-label="Gráfico de barras horizontais por estado"></canvas>
+            <div class="chart-scroll" aria-label="Área rolável do gráfico de estados">
+              <div class="chart-inner chart-inner-states">
+                <canvas id="stateChart" height="340" aria-label="Gráfico de barras horizontais por estado"></canvas>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -334,7 +346,11 @@ FROM 'data/processed/base_final.parquet';</code></pre>
               <h4>Perfil médio diário por período de comercialização</h4>
               <p>Comparação entre consumo ACL, ajustado e ponto de conexão.</p>
             </div>
-            <canvas id="hourlyChart" height="300" aria-label="Gráfico de linhas do perfil horário médio"></canvas>
+            <div class="chart-scroll" aria-label="Área rolável do gráfico de perfil horário">
+              <div class="chart-inner chart-inner-hourly">
+                <canvas id="hourlyChart" height="300" aria-label="Gráfico de linhas do perfil horário médio"></canvas>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -352,7 +368,11 @@ FROM 'data/processed/base_final.parquet';</code></pre>
               <h4>Diferença percentual entre consumo ajustado e ponto de conexão</h4>
               <p>Percentual calculado sobre o consumo ajustado total.</p>
             </div>
-            <canvas id="differenceChart" height="280" aria-label="Gráfico de linha da diferença percentual"></canvas>
+            <div class="chart-scroll" aria-label="Área rolável do gráfico de diferença percentual">
+              <div class="chart-inner chart-inner-line">
+                <canvas id="differenceChart" height="280" aria-label="Gráfico de linha da diferença percentual"></canvas>
+              </div>
+            </div>
           </div>
         </article>
 
