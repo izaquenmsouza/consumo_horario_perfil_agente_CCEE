@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pipeline analítico CCEE | 195 milhões de registros horários</title>
+    <meta
+      name="description"
+      content="Case de portfólio sobre a consolidação de arquivos CSV massivos da CCEE em Parquet e análises temporais, regionais e operacionais de consumo horário de energia no ACL."
+    />
+    <meta name="author" content="Izaque Souza" />
+    <meta property="og:title" content="Pipeline analítico para exploração de 195 milhões de registros horários da CCEE" />
+    <meta
+      property="og:description"
+      content="Dados abertos massivos da CCEE transformados em uma base Parquet escalável e usados em análises temporais, regionais e operacionais sobre consumo de energia."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="theme-color" content="#fafafa" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Navegação principal">
+        <a class="brand" href="#top" aria-label="Voltar ao topo">CCEE Data Portfolio</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+          Menu
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a href="#contexto">Contexto</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#analises">Análises</a>
+          <a href="#insights">Insights</a>
+          <a href="#resultado">Resultado</a>
+          <a href="#codigo">Código</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-content">
+          <p class="eyebrow">Portfólio de dados · Engenharia analítica · Mercado de energia</p>
+          <h1>Pipeline analítico para exploração de 195 milhões de registros horários da CCEE</h1>
+          <p class="hero-subtitle">
+            Consolidação de arquivos CSV massivos em uma base Parquet otimizada, seguida de
+            análises temporais, regionais e operacionais sobre o consumo de energia no Ambiente
+            de Contratação Livre.
+          </p>
+
+          <p class="author-line">
+            Desenvolvido por
+            <a
+              href="https://www.linkedin.com/in/izaque-souza-367033114/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Izaque Souza
+            </a>
+          </p>
+
+          <div class="hero-meta" aria-label="Tecnologias utilizadas">
+            <span>DuckDB</span>
+            <span>Python</span>
+            <span>Pandas</span>
+            <span>PyArrow</span>
+            <span>Parquet</span>
+          </div>
+
+          <dl class="project-facts">
+            <div>
+              <dt>Leitura</dt>
+              <dd>10 min</dd>
+            </div>
+            <div>
+              <dt>Período analisado</dt>
+              <dd>set/2025 a fev/2026</dd>
+            </div>
+            <div>
+              <dt>Volume final</dt>
+              <dd>195.448.968 registros</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="section" id="contexto">
+        <div class="section-kicker">Contexto</div>
+        <h2>O desafio era transformar dados abertos massivos em uma base analítica confiável.</h2>
+        <div class="content-grid">
+          <p>
+            A base <strong>CONSUMO_HORARIO_PERFIL_AGENTE</strong>, publicada pela CCEE, reúne
+            informações de consumo bruto, consumo ajustado e consumo no ponto de conexão por
+            agente, carga, cidade, estado, submercado e período de comercialização.
+          </p>
+          <p>
+            O projeto evoluiu de uma unificação de CSVs para um pipeline completo: consolidação
+            dos arquivos, geração de Parquet, validação da base e análises exploratórias sobre
+            dimensões temporais, regionais e operacionais do consumo no ACL.
+          </p>
+        </div>
+
+        <div class="callout">
+          <strong>Motivação de negócio:</strong>
+          reduzir o atrito técnico no uso de uma base pública de grande volume e criar uma
+          fundação reutilizável para responder perguntas sobre consumo de energia em múltiplos
+          níveis de agregação.
+        </div>
+      </section>
+
+      <section class="section" id="pipeline">
+        <div class="section-kicker">Pipeline</div>
+        <h2>Da ingestão dos CSVs à exploração analítica em Parquet.</h2>
+        <ol class="timeline">
+          <li>
+            <span>1</span>
+            <div>
+              <h3>Preparação do ambiente</h3>
+              <p>Uso de DuckDB, Pandas, PyArrow e Python para leitura, consulta e exportação.</p>
+            </div>
+          </li>
+          <li>
+            <span>2</span>
+            <div>
+              <h3>Consolidação dos CSVs</h3>
+              <p>Leitura automática de seis arquivos mensais e criação da tabela <code>base_unificada</code>.</p>
+            </div>
+          </li>
+          <li>
+            <span>3</span>
+            <div>
+              <h3>Validação da base</h3>
+              <p>Checagem de volume, schema, período coberto, cargas, perfis, cidades, estados e submercados.</p>
+            </div>
+          </li>
+          <li>
+            <span>4</span>
+            <div>
+              <h3>Exportação para Parquet</h3>
+              <p>Geração de <code>base_final.parquet</code> para análises sem releitura dos CSVs originais.</p>
+            </div>
+          </li>
+          <li>
+            <span>5</span>
+            <div>
+              <h3>Análises exploratórias</h3>
+              <p>Consultas temporais, regionais, horárias, operacionais e por classe de perfil de agente.</p>
+            </div>
+          </li>
+        </ol>
+
+        <article class="step">
+          <div class="step-copy">
+            <p class="step-label">Código do pipeline</p>
+            <h3>Consolidação e exportação em formato otimizado</h3>
+            <p>
+              Os caminhos locais do notebook foram substituídos por caminhos genéricos para
+              preservar a portabilidade do artigo sem expor diretórios do computador.
+            </p>
+          </div>
+          <details class="code-toggle">
+            <summary>Ver código</summary>
+            <pre><code>import duckdb
+import os
+from pathlib import Path
+
+pasta = Path("data/raw")
+arquivos = [pasta / f for f in os.listdir(pasta) if f.endswith(".csv")]
+
+con = duckdb.connect()
+
+con.execute("""
+CREATE TABLE base_unificada AS
+SELECT *
+FROM read_csv_auto(
+    'data/raw/*.csv',
+    delim=';',
+    quote='"',
+    escape='"'
+)
+""")
+
+con.execute("""
+COPY base_unificada
+TO 'data/processed/base_final.parquet'
+(FORMAT 'parquet')
+""")</code></pre>
+          </details>
+        </article>
+      </section>
+
+      <section class="section" id="analises">
+        <div class="section-kicker">Análises</div>
+        <h2>Exploração temporal, regional e operacional a partir da base Parquet.</h2>
+
+        <article class="analysis-block">
+          <div class="analysis-copy">
+            <p class="step-label">Visão geral da base consolidada</p>
+            <h3>Escala, cobertura temporal e granularidade preservadas</h3>
+            <p>
+              A base consolidada cobre seis meses de referência, de setembro de 2025 a fevereiro
+              de 2026, com abrangência territorial e operacional suficiente para análises em
+              diferentes níveis.
+            </p>
+          </div>
+          <div class="metric-grid">
+            <div class="metric">
+              <span>Total de registros</span>
+              <strong>195.448.968</strong>
+            </div>
+            <div class="metric">
+              <span>Cargas distintas</span>
+              <strong>46.453</strong>
+            </div>
+            <div class="metric">
+              <span>Perfis de agente</span>
+              <strong>19.680</strong>
+            </div>
+            <div class="metric">
+              <span>Cidades · Estados · Submercados</span>
+              <strong>2.955 · 27 · 4</strong>
+            </div>
+          </div>
+          <details class="code-toggle">
+            <summary>Ver consulta</summary>
+            <pre><code>SELECT
+    COUNT(*) AS total_registros,
+    COUNT(DISTINCT MES_REFERENCIA) AS meses_referencia,
+    MIN(DATA) AS data_inicial,
+    MAX(DATA) AS data_final,
+    COUNT(DISTINCT CODIGO_CARGA) AS cargas_distintas,
+    COUNT(DISTINCT CODIGO_PERFIL_AGENTE) AS perfis_agente_distintos,
+    COUNT(DISTINCT CIDADE_CARGA) AS cidades_distintas,
+    COUNT(DISTINCT ESTADO_CARGA) AS estados_distintos,
+    COUNT(DISTINCT SUBMERCADO) AS submercados_distintos
+FROM 'data/processed/base_final.parquet';</code></pre>
+          </details>
+        </article>
+
+        <article class="analysis-block">
+          <div class="analysis-copy">
+            <p class="step-label">Consumo médio diário por mês</p>
+            <h3>Normalizar por dias evita leitura equivocada do consumo mensal.</h3>
+            <p>
+              O notebook mostra que fevereiro de 2026 teve o maior consumo ACL médio diário,
+              mesmo tendo o menor volume mensal agregado por possuir menos dias.
+            </p>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h4>Consumo médio diário por mês de referência</h4>
+              <p>Valores médios diários calculados após agregação por data.</p>
+            </div>
+            <canvas id="dailyMonthChart" height="280" aria-label="Gráfico de linhas do consumo médio diário por mês"></canvas>
+          </div>
+          <div class="table-wrap compact">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mês</th>
+                  <th>Dias</th>
+                  <th>ACL médio diário</th>
+                  <th>Ajustado médio diário</th>
+                  <th>Ponto de conexão médio diário</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>202509</td><td>30</td><td>1.633.681,22</td><td>1.633.692,17</td><td>1.600.775,98</td></tr>
+                <tr><td>202510</td><td>31</td><td>1.663.865,15</td><td>1.663.878,84</td><td>1.631.520,33</td></tr>
+                <tr><td>202511</td><td>30</td><td>1.652.745,42</td><td>1.652.764,55</td><td>1.619.698,58</td></tr>
+                <tr><td>202512</td><td>31</td><td>1.701.613,32</td><td>1.701.629,28</td><td>1.665.002,97</td></tr>
+                <tr><td>202601</td><td>31</td><td>1.716.079,01</td><td>1.716.093,58</td><td>1.674.582,00</td></tr>
+                <tr><td>202602</td><td>28</td><td>1.783.072,63</td><td>1.783.087,94</td><td>1.737.780,61</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="analysis-block">
+          <div class="analysis-copy">
+            <p class="step-label">Consumo por submercado</p>
+            <h3>O Sudeste concentra 55,92% do consumo ACL agregado.</h3>
+            <p>
+              A segmentação por submercado evidencia a concentração regional do consumo e mostra
+              também a quantidade de cargas distintas associadas a cada região.
+            </p>
+          </div>
+          <div class="split-visual">
+            <div class="chart-card">
+              <div class="chart-header">
+                <h4>Participação percentual por submercado</h4>
+                <p>Distribuição do consumo ACL agregado.</p>
+              </div>
+              <canvas id="submarketChart" height="260" aria-label="Gráfico de barras por submercado"></canvas>
+            </div>
+            <div class="rank-list">
+              <div><span>SUDESTE</span><strong>55,92%</strong><small>25.785 cargas</small></div>
+              <div><span>SUL</span><strong>17,53%</strong><small>11.854 cargas</small></div>
+              <div><span>NORDESTE</span><strong>15,89%</strong><small>6.525 cargas</small></div>
+              <div><span>NORTE</span><strong>10,65%</strong><small>2.289 cargas</small></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="analysis-block">
+          <div class="analysis-copy">
+            <p class="step-label">Consumo por estado</p>
+            <h3>São Paulo lidera a distribuição estadual com 26,70% do total analisado.</h3>
+            <p>
+              O ranking por estado detalha a concentração regional. No notebook, os maiores
+              valores aparecem em SP, MG, RJ, PR, SC e BA.
+            </p>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h4>Top 15 estados por consumo ACL agregado</h4>
+              <p>Participação percentual calculada sobre o consumo ACL total.</p>
+            </div>
+            <canvas id="stateChart" height="340" aria-label="Gráfico de barras horizontais por estado"></canvas>
+          </div>
+        </article>
+
+        <article class="analysis-block">
+          <div class="analysis-copy">
+            <p class="step-label">Perfil médio horário</p>
+            <h3>A curva intradiária tem menor consumo no meio do dia e pico no início da noite.</h3>
+            <p>
+              A análise agregou o consumo por data e período de comercialização, depois calculou
+              a média desses totais horários ao longo dos dias disponíveis.
+            </p>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h4>Perfil médio diário por período de comercialização</h4>
+              <p>Comparação entre consumo ACL, ajustado e ponto de conexão.</p>
+            </div>
+            <canvas id="hourlyChart" height="300" aria-label="Gráfico de linhas do perfil horário médio"></canvas>
+          </div>
+        </article>
+
+        <article class="analysis-block">
+          <div class="analysis-copy">
+            <p class="step-label">Diferença entre métricas de consumo</p>
+            <h3>A distância entre consumo ajustado e ponto de conexão aumentou no período.</h3>
+            <p>
+              A diferença percentual ficou próxima de 2% entre setembro e novembro de 2025,
+              subindo para 2,42% em janeiro de 2026 e 2,54% em fevereiro de 2026.
+            </p>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h4>Diferença percentual entre consumo ajustado e ponto de conexão</h4>
+              <p>Percentual calculado sobre o consumo ajustado total.</p>
+            </div>
+            <canvas id="differenceChart" height="280" aria-label="Gráfico de linha da diferença percentual"></canvas>
+          </div>
+        </article>
+
+        <article class="analysis-block">
+          <div class="analysis-copy">
+            <p class="step-label">Classe de perfil de agente</p>
+            <h3>Distribuidor representa 60,00% do consumo ACL agregado.</h3>
+            <p>
+              A leitura por classe mostra uma concentração relevante em Distribuidor e Consumidor
+              Livre, ao mesmo tempo em que preserva a contagem de perfis e cargas distintas.
+            </p>
+          </div>
+          <div class="table-card">
+            <div class="table-caption">
+              <h4>Consumo ACL por classe de perfil</h4>
+              <p>Valores extraídos da tabela final do notebook.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Classe</th>
+                    <th>Consumo ACL total</th>
+                    <th>Participação</th>
+                    <th>Perfis distintos</th>
+                    <th>Cargas distintas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Distribuidor</td><td>183.622.521,64</td><td>60,00%</td><td>100</td><td>144</td></tr>
+                  <tr><td>Consumidor Livre</td><td>95.943.513,48</td><td>31,35%</td><td>12.435</td><td>14.608</td></tr>
+                  <tr><td>Consumidor Especial</td><td>15.370.723,19</td><td>5,02%</td><td>6.973</td><td>31.657</td></tr>
+                  <tr><td>Autoprodutor</td><td>10.817.084,48</td><td>3,53%</td><td>157</td><td>251</td></tr>
+                  <tr><td>Exportador</td><td>293.271,78</td><td>0,10%</td><td>15</td><td>15</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="insights">
+        <div class="section-kicker">Insights</div>
+        <h2>Síntese dos principais achados do notebook atualizado.</h2>
+        <div class="cards three">
+          <article class="card highlight">
+            <h3>Base robusta e validada</h3>
+            <p>195.448.968 registros foram preservados, cobrindo seis meses de dados horários entre setembro de 2025 e fevereiro de 2026.</p>
+          </article>
+          <article class="card highlight">
+            <h3>Comparação temporal exige normalização</h3>
+            <p>A análise mensal mostrou influência da duração dos meses; após normalização diária, fevereiro de 2026 teve o maior consumo médio diário.</p>
+          </article>
+          <article class="card highlight">
+            <h3>Concentração regional clara</h3>
+            <p>O Sudeste concentrou 55,92% do consumo ACL agregado, e São Paulo representou 26,70% do total analisado.</p>
+          </article>
+          <article class="card highlight">
+            <h3>Perfil intradiário definido</h3>
+            <p>O consumo médio reduziu ao longo da manhã, atingiu valores menores perto dos períodos 10 a 12 e teve pico entre 18 e 20.</p>
+          </article>
+          <article class="card highlight">
+            <h3>Métricas de consumo divergem</h3>
+            <p>A diferença percentual entre consumo ajustado e ponto de conexão aumentou de 2,01% para 2,54% no período observado.</p>
+          </article>
+          <article class="card highlight">
+            <h3>Perfil de agente importa</h3>
+            <p>Distribuidor concentrou 60,00% do consumo ACL agregado, apesar de ter menos cargas distintas que consumidores livres e especiais.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="resultado">
+        <div class="section-kicker">Resultado</div>
+        <h2>O processamento bruto virou uma base escalável e uma leitura analítica do consumo horário.</h2>
+        <div class="content-grid">
+          <p>
+            O resultado final é uma base Parquet validada, com cobertura temporal, regional e
+            operacional descrita, pronta para consultas mais rápidas e análises posteriores sem
+            repetir a ingestão dos CSVs massivos.
+          </p>
+          <p>
+            A etapa exploratória mostrou que o pipeline não apenas organiza dados: ele cria uma
+            plataforma de investigação para avaliar consumo por mês, submercado, estado, horário,
+            métrica de consumo e classe de perfil de agente.
+          </p>
+        </div>
+        <div class="applications">
+          <h3>Possíveis aplicações futuras</h3>
+          <ul>
+            <li>Dashboards regionais de consumo no Ambiente de Contratação Livre.</li>
+            <li>Monitoramento mensal de diferenças entre consumo ajustado e ponto de conexão.</li>
+            <li>Estudos de perfil horário por submercado, estado ou classe de agente.</li>
+            <li>Modelos de previsão ou detecção de anomalias a partir da base Parquet.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section closing" id="codigo">
+        <div>
+          <div class="section-kicker">Código</div>
+          <h2>Notebook completo disponível no GitHub.</h2>
+          <p>
+            A página reorganiza o notebook em formato de case profissional, mantendo o foco na
+            narrativa, nos resultados e nas decisões analíticas.
+          </p>
+        </div>
+        <a
+          class="button"
+          href="https://github.com/izaquenmsouza/consumo_horario_perfil_agente_CCEE/blob/main/Unifi_dados_CCEE_Perfil_Agente.ipynb"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ver Notebook Completo
+        </a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Projeto de portfólio técnico · Dados abertos CCEE · Desenvolvido por Izaque Souza</p>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>
